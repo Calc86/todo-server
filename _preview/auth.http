@@ -43,3 +43,8 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.token);
 %}
 
+### Профиль
+
+GET {{server}}/api/user/profile
+accept: application/json
+#Authorization: Bearer {{auth_token}}

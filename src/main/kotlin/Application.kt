@@ -8,13 +8,14 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    configureFrameworks()
     configureHTTP()
     configureSecurity()
 //    configureMonitoring()
     configureSerialization()
     configureTemplating()
     configureDatabases()
-    configureFrameworks()
+
     configureAdministration()
     configureRouting()
     configureApi()

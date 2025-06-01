@@ -41,9 +41,9 @@ fun Application.configureApi() {
                         val token = JWT.create()
                             .withAudience(jwt.audience)
                             .withIssuer(jwt.issuer)
-                            .withClaim("email", user.email)
-                            .withClaim("sid", "any")
-                            .withClaim("id", user.id)
+                            .withClaim(UserPrincipal.CLAIM_EMAIL, user.email)
+                            .withClaim(UserPrincipal.CLAIM_SID, "any")
+                            .withClaim(UserPrincipal.CLAIM_ID, user.id)
                             .withExpiresAt(Date(System.currentTimeMillis() + jwt.ttl * 1000))
                             .sign(Algorithm.HMAC256(jwt.secret))
                         call.respond(
@@ -67,9 +67,14 @@ fun Application.configureApi() {
                         }
                     }
                 }
-                get("/profile") {
-                    // todo 20250602 check auth
-
+//                authenticate(optional = true) {// optional throw token expired, and work without token
+                authenticate {
+                    get("/profile") {
+                        // todo 20250602 check auth
+                        val principal = call.principal<UserPrincipal>()!!
+                        //val username = principal!!.payload.getClaim("username").asString()
+                        call.respond(principal.user)
+                    }
                 }
             }
         }
