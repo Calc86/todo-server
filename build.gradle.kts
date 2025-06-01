@@ -54,8 +54,12 @@ dependencies {
     implementation("org.jetbrains:kotlin-css:1.0.0-pre.129-kotlin-1.4.20")
     implementation("io.ktor:ktor-server-pebble")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
+
+    // Database
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposed_version")
+
     implementation("com.h2database:h2:$h2_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")

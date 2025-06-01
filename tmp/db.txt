@@ -1,34 +1,35 @@
-users
++users
 ---
 id
+uuid
 date
 email  - generated when empty
 password (hash) - nullable when auth
 status
 
-profiles
++users_profiles
 ---
 user_id
 name
 (any other data/settings)
 
-users_friends
++users_friends
 ---
 user_id1 - кто
 user_id2 - кого
 date
 title - как обозвать
 
-users_auth
++users_auth
 ---
 id
 user_id
-type - oAuth/LDAP
 date
+type - oAuth/LDAP
 auth_id
 auth_data
 
-shop_lists
++shop_lists
 ---
 id
 users_id
@@ -41,66 +42,63 @@ date
 status - new/done/repeated/delay
 comment
 
-shop_list_tags
++tags
 ---
 id
-list_id
 name
 description
 
-shop_list_tags_relations
++shop_list_tags
 ---
-id
 list_id
 tag_id
 
-shop_list_images
++shop_list_images
 ---
 id
 list_id
 image - uri
 
-shop_list_history
++shop_list_history
 ---
 id
 list_id
 date
-barcode
 barcode_type - EAN11/код с весом
+barcode
 unit
-unit_number
+unit_value
 price_unit руб/$ и т.д.
 price - float
 comment
 
-shop_list_history_markets
++shop_list_history_markets
 ---
 id
 history_id
 market - название, адрес
 
-shop_list_history_images
++shop_list_history_images
 ---
 id
 history_id
 image
 
-shop_list_friends
++shop_list_friends
 ---
-id
 list_id
 user_id
 date
 comment
 
-shop_list_history_friends
++shop_list_history_friends
 ---
-id
-user_id1
-user_id2
+history_id
+user_id
 date
+comment
 
-todos
++todos
 ---
 id
 users_id
@@ -109,10 +107,10 @@ repeating - повторяется 0/1
 date1 - nullable anytime
 date2 - nullable
 date_tz - nullable date
-status - new/done/repeated
+status - new/done/repeated/delay
 date_next - nullable for non repeating
 
-todos_repeating
++todo_repeating
 ---
 id
 todo_id
@@ -120,21 +118,22 @@ repeating_unit - weekdays/n_hour/n_day/n_month/day_month
 repeating_value
 date_tz
 
-todos_done
++todo_done
 ---
 id
 todo_id
+repeating_id
 date
 comment
 
-todos_friends
++todo_friends
 ---
-id
 todo_id
 user_id
 date
+comment
 
-todos_notification
+todo_notification
 ---
 id
 todo_id
@@ -142,7 +141,7 @@ type - before/exact/after/at_end
 unit_type - min/hour/day/etc
 date_next - когда нужно напомнить
 
-notifications_types
+notification_types
 ---
 id
 name
