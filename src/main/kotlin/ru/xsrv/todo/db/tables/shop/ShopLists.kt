@@ -7,10 +7,10 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 
-object ShopList : IntIdTable(Names.TABLE) {
+object ShopLists : IntIdTable(Names.TABLE) {
 
     val user = reference(Names.USER_ID, Users.id, onDelete = ReferenceOption.CASCADE)
-    val list = reference(Names.LIST_ID, ShopList.id, onDelete = ReferenceOption.CASCADE)
+    val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
     val title = varchar(Names.TITLE, length = VAR_CHAR_MAX_LENGTH)
     val description = text(Names.DESCRIPTION)
     val unit = enumeration(Names.UNIT, Units::class)

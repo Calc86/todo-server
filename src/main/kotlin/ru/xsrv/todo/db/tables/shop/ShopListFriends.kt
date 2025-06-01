@@ -8,7 +8,7 @@ import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 
 object ShopListFriends : Table(Names.TABLE) {
 
-    val list = reference(Names.LIST_ID, ShopList.id, onDelete = ReferenceOption.CASCADE)
+    val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
     val user = reference(Names.USER_ID, Users.id, onDelete = ReferenceOption.CASCADE)
     val date = datetime(Names.DATE).defaultExpression(CurrentDateTime)
     val comment = text(Names.COMMENT).default("")

@@ -1,4 +1,4 @@
-package ru.xsrv.todo.ru.xsrv.todo
+package ru.xsrv.todo.ru.xsrv.todo.services
 
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.*

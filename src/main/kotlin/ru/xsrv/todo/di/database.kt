@@ -4,7 +4,7 @@ import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.koin.dsl.module
-import ru.xsrv.todo.ru.xsrv.todo.UserService
+import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 import ru.xsrv.todo.ru.xsrv.todo.ktor.DBConfig
 import java.sql.Connection.TRANSACTION_SERIALIZABLE
 

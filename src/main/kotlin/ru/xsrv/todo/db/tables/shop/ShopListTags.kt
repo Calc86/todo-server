@@ -2,11 +2,11 @@ package ru.xsrv.todo.ru.xsrv.todo.db.tables.shop
 
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
-import ru.xsrv.todo.ru.xsrv.todo.db.Tags
+import ru.xsrv.todo.ru.xsrv.todo.db.tables.Tags
 
 object ShopListTags : Table(Names.TABLE) {
 
-    val list = reference(Names.LIST_ID, ShopList.id, onDelete = ReferenceOption.CASCADE)
+    val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
     val tag = reference(Names.TAG_ID, Tags.id, onDelete = ReferenceOption.CASCADE)
 
     override val primaryKey = PrimaryKey(list, tag)

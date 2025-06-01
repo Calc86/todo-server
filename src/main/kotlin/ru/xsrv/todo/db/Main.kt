@@ -3,7 +3,7 @@ package ru.xsrv.todo.ru.xsrv.todo.db
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.xsrv.todo.ru.xsrv.todo.UserService
+import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 import ru.xsrv.todo.ru.xsrv.todo.db.entities.UserEntity
 
 fun main() {

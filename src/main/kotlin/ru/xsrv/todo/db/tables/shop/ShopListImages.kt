@@ -6,7 +6,7 @@ import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 
 object ShopListImages : IntIdTable(Names.TABLE) {
 
-    val list = reference(Names.LIST_ID, ShopList.id, onDelete = ReferenceOption.CASCADE)
+    val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
     val image = varchar(Names.IMAGE, length = VAR_CHAR_MAX_LENGTH)
 
     private object Names {

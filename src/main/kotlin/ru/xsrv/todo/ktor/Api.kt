@@ -9,7 +9,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
-import ru.xsrv.todo.ru.xsrv.todo.UserService
+import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 import ru.xsrv.todo.ru.xsrv.todo.models.requests.Auth
 import ru.xsrv.todo.ru.xsrv.todo.models.requests.Register
 import java.util.*

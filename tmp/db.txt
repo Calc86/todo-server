@@ -120,6 +120,8 @@ repeating - повторяется 0/1
 date1 - nullable anytime
 date2 - nullable
 date_tz - nullable date
+title
+description
 status - new/done/repeated/delay
 date_next - nullable for non repeating
 

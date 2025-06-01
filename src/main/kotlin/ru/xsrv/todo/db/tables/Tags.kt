@@ -1,6 +1,7 @@
-package ru.xsrv.todo.ru.xsrv.todo.db
+package ru.xsrv.todo.ru.xsrv.todo.db.tables
 
 import org.jetbrains.exposed.dao.id.IntIdTable
+import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 
 object Tags : IntIdTable(Names.TABLE) {
 

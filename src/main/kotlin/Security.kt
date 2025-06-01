@@ -13,7 +13,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import org.koin.ktor.ext.inject
-import ru.xsrv.todo.ru.xsrv.todo.UserService
+import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 import ru.xsrv.todo.ru.xsrv.todo.ktor.JWTConfig
 import ru.xsrv.todo.ru.xsrv.todo.ktor.UserPrincipal
 

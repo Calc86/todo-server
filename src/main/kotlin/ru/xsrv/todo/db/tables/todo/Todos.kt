@@ -3,6 +3,7 @@ package ru.xsrv.todo.ru.xsrv.todo.db.tables.todo
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
+import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 
 object Todos : IntIdTable(Names.TABLE) {
@@ -13,6 +14,8 @@ object Todos : IntIdTable(Names.TABLE) {
     val date1 = datetime(Names.DATE1).nullable().default(null)
     val date2 = datetime(Names.DATE2).nullable().default(null)
     val dateTZ = integer(Names.DATE_TZ).default(0)
+    val title = varchar(Names.TITLE, VAR_CHAR_MAX_LENGTH)
+    val description = varchar(Names.DESCRIPTION, VAR_CHAR_MAX_LENGTH)
     val status = enumeration(Names.STATUS, Status::class).index()
     val dateNext = datetime(Names.DATE_NEXT).nullable().default(null).index()
 
@@ -51,6 +54,8 @@ object Todos : IntIdTable(Names.TABLE) {
         const val DATE1 = "date1"
         const val DATE2 = "date2"
         const val DATE_TZ = "date_tz"
+        const val TITLE = "title"
+        const val DESCRIPTION = "description"
         const val STATUS = "status"
         const val DATE_NEXT = "date_next"
     }

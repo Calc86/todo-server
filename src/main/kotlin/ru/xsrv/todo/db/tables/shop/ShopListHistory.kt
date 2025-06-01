@@ -5,11 +5,11 @@ import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
-import ru.xsrv.todo.ru.xsrv.todo.db.tables.shop.ShopList.Units
+import ru.xsrv.todo.ru.xsrv.todo.db.tables.shop.ShopLists.Units
 
 object ShopListHistory : IntIdTable(Names.TABLE) {
 
-    val list = reference(Names.LIST_ID, ShopList.id, onDelete = ReferenceOption.CASCADE)
+    val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
     val date = datetime(Names.DATE).defaultExpression(CurrentDateTime).index()
 
     val barcode_type = varchar(Names.BARCODE_TYPE, length = VAR_CHAR_MAX_LENGTH).nullable().default(null)
