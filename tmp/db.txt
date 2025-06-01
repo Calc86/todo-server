@@ -1,0 +1,162 @@
+users
+---
+id
+date
+email  - generated when empty
+password (hash) - nullable when auth
+status
+
+profiles
+---
+user_id
+name
+(any other data/settings)
+
+users_friends
+---
+user_id1 - кто
+user_id2 - кого
+date
+title - как обозвать
+
+users_auth
+---
+id
+user_id
+type - oAuth/LDAP
+date
+auth_id
+auth_data
+
+shop_lists
+---
+id
+users_id
+list_id - для повторения
+title
+description
+unit шт/кг/гр
+unit_value float
+date
+status - new/done/repeated/delay
+comment
+
+shop_list_tags
+---
+id
+list_id
+name
+description
+
+shop_list_tags_relations
+---
+id
+list_id
+tag_id
+
+shop_list_images
+---
+id
+list_id
+image - uri
+
+shop_list_history
+---
+id
+list_id
+date
+barcode
+barcode_type - EAN11/код с весом
+unit
+unit_number
+price_unit руб/$ и т.д.
+price - float
+comment
+
+shop_list_history_markets
+---
+id
+history_id
+market - название, адрес
+
+shop_list_history_images
+---
+id
+history_id
+image
+
+shop_list_friends
+---
+id
+list_id
+user_id
+date
+comment
+
+shop_list_history_friends
+---
+id
+user_id1
+user_id2
+date
+
+todos
+---
+id
+users_id
+type - anytime(в любое время)/onetime(конкретное время)/date(конкретная дата)/time_interval(от-до)/period(количество часов)
+repeating - повторяется 0/1
+date1 - nullable anytime
+date2 - nullable
+date_tz - nullable date
+status - new/done/repeated
+date_next - nullable for non repeating
+
+todos_repeating
+---
+id
+todo_id
+repeating_unit - weekdays/n_hour/n_day/n_month/day_month
+repeating_value
+date_tz
+
+todos_done
+---
+id
+todo_id
+date
+comment
+
+todos_friends
+---
+id
+todo_id
+user_id
+date
+
+todos_notification
+---
+id
+todo_id
+type - before/exact/after/at_end
+unit_type - min/hour/day/etc
+date_next - когда нужно напомнить
+
+notifications_types
+---
+id
+name
+description
+
+notifications
+--
+id
+date
+notification_id
+user_id
+type - shop/todo/etc
+type_id - relation for any table
+title
+text
+data
+sent
