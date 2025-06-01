@@ -4,7 +4,24 @@ ktor:
       - ru.xsrv.todo.ApplicationKt.module
   deployment:
     port: 8080
+    watch:  # development
+      - classes
+      - resources
+  development: true
+
+db:
+  #url: "jdbc:sqlite:file:test?mode=memory&cache=shared"
+  url: "jdbc:sqlite:./data/data.db"
+  #url: "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
+  user: "root"
+  driver: "org.sqlite.JDBC"
+  #driver: "org.h2.Driver"
+  password: ""
+
 jwt:
   domain: "https://jwt-provider-domain/"
   audience: "jwt-audience"
-  realm: "ktor sample app"
+  realm: "ktor todo app"
+  secret: "shared_jwt_secret_change_after_deploy!!"
+  ttl: 60
+  #ttl: 86400

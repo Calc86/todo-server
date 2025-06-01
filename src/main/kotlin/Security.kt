@@ -1,7 +1,5 @@
 package ru.xsrv.todo
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.http.*
@@ -14,6 +12,19 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 
 fun Application.configureSecurity() {
+    val secret = environment.config.property("jwt.secret").getString()
+    val issuer = environment.config.property("jwt.domain").getString()
+    val audience = environment.config.property("jwt.audience").getString()
+    val myRealm = environment.config.property("jwt.realm").getString()
+
+    authentication {
+
+        jwt {
+
+        }
+    }
+
+    // default generated bellow
     authentication {
         basic(name = "myauth1") {
             realm = "Ktor Server"
@@ -35,25 +46,25 @@ fun Application.configureSecurity() {
         }
     }
     // Please read the jwt property from the config file if you are using EngineMain
-    val jwtAudience = "jwt-audience"
-    val jwtDomain = "https://jwt-provider-domain/"
-    val jwtRealm = "ktor sample app"
-    val jwtSecret = "secret"
-    authentication {
-        jwt {
-            realm = jwtRealm
-            verifier(
-                JWT
-                    .require(Algorithm.HMAC256(jwtSecret))
-                    .withAudience(jwtAudience)
-                    .withIssuer(jwtDomain)
-                    .build()
-            )
-            validate { credential ->
-                if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
-            }
-        }
-    }
+//    val jwtAudience = "jwt-audience"
+//    val jwtDomain = "https://jwt-provider-domain/"
+//    val jwtRealm = "ktor sample app"
+//    val jwtSecret = "secret"
+//    authentication {
+//        jwt {
+//            realm = jwtRealm
+//            verifier(
+//                JWT
+//                    .require(Algorithm.HMAC256(jwtSecret))
+//                    .withAudience(jwtAudience)
+//                    .withIssuer(jwtDomain)
+//                    .build()
+//            )
+//            validate { credential ->
+//                if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
+//            }
+//        }
+//    }
     val localhost = "http://0.0.0.0"
     val ldapServerPort = 6998 // TODO: change to real value!
     authentication {

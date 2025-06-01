@@ -55,12 +55,15 @@ dependencies {
     implementation("io.ktor:ktor-server-pebble")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
     implementation("org.mindrot:jbcrypt:0.4")
+//    implementation("io.ktor:ktor-server-request-validation")
+
 
     // Database
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.xerial:sqlite-jdbc:3.44.1.0")
 
     implementation("com.h2database:h2:$h2_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
