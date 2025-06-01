@@ -10,7 +10,7 @@ fun main(args: Array<String>) {
 fun Application.module() {
     configureHTTP()
     configureSecurity()
-    configureMonitoring()
+//    configureMonitoring()
     configureSerialization()
     configureTemplating()
     configureDatabases()

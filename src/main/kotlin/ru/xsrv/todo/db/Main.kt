@@ -3,8 +3,8 @@ package ru.xsrv.todo.ru.xsrv.todo.db
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.xsrv.todo.ru.xsrv.todo.db.entities.UserEntity
 import ru.xsrv.todo.ru.xsrv.todo.UserService
+import ru.xsrv.todo.ru.xsrv.todo.db.entities.UserEntity
 
 fun main() {
     val database = Database.connect(
@@ -28,7 +28,7 @@ fun main() {
         println(c.id)
         println(c.email)
         transaction {
-            println(c.profile.first().name)
+            println(c.profile.name)
         }
 
         val user = us.selectUser(2)!!

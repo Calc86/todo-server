@@ -49,6 +49,8 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
     implementation("io.ktor:ktor-server-content-negotiation")
     implementation("io.ktor:ktor-serialization-gson")
+//    implementation("io.ktor:ktor-serialization-jackson")
+//    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0")
     implementation("io.ktor:ktor-server-html-builder")
     implementation("org.jetbrains.kotlinx:kotlinx-html:$kotlinx_html_version")
     implementation("org.jetbrains:kotlin-css:1.0.0-pre.129-kotlin-1.4.20")

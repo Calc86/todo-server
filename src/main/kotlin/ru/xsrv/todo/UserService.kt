@@ -13,6 +13,8 @@ import ru.xsrv.todo.ru.xsrv.todo.db.returnOnTrueOrNull
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.UsersProfiles
 import ru.xsrv.todo.ru.xsrv.todo.models.User
+import ru.xsrv.todo.ru.xsrv.todo.models.requests.Register
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class UserService(
@@ -26,21 +28,45 @@ class UserService(
         }
     }
 
-    suspend fun registerByEmail(email: String, name: String, password: String): UserEntity = dbQuery {
+    suspend fun registerUser(register: Register) = registerByEmail(
+        register.email!!,
+        register.name!!,
+        register.password!!,
+        Users.Device.valueOf(register.device!!.uppercase()),
+        UUID.fromString(register.device_id!!)
+    )
+
+    suspend fun registerByEmail(
+        email: String,
+        name: String,
+        password: String,
+        device: Users.Device? = null,
+        deviceId: UUID? = null
+    ): User = dbQuery {
         Users.insertAndGetId {
             it[this.email] = email
             it[this.password] = password.hashPassword()
+            if(device != null) it[this.device] = device
+            if(deviceId != null) it[this.device_id] = deviceId
         }.value.also { id ->
             UsersProfiles.insert {
                 it[user] = id
                 it[this.name] = name
             }
-        }.let(UserEntity::findById) ?: throw UnknownInsertErrorException("registerByEmail")
+        }.let(UserEntity::findById)?.let { User.entityMapper(it) } ?: throw UnknownInsertErrorException("registerByEmail")
     }
 
     private fun selectUserBlocking(id: Int): User? = UserEntity.findById(id)?.let(User.entityMapper)
 
     suspend fun selectUser(id: Int): User? = dbQuery { selectUserBlocking(id) }
+
+    suspend fun selectUser(email: String): User? = dbQuery {
+        UserEntity.find {
+            Users.email eq email
+        }
+            .firstOrNull()
+            ?.let(User.entityMapper)
+    }
 
     suspend fun selectUser(email: String, password: String): User? = dbQuery {
         UserEntity.find {

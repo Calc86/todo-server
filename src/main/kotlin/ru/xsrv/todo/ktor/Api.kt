@@ -8,24 +8,16 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.koin.ktor.ext.inject
 import ru.xsrv.todo.ru.xsrv.todo.UserService
 import ru.xsrv.todo.ru.xsrv.todo.models.requests.Auth
-import java.sql.Connection.TRANSACTION_SERIALIZABLE
+import ru.xsrv.todo.ru.xsrv.todo.models.requests.Register
 import java.util.*
 
 fun Application.configureApi() {
-    val dbConfig = environment.dbConfig()
-    val database = Database.connect(
-        url = dbConfig.url,
-        driver = dbConfig.driver,
-        user = dbConfig.user,
-        password = dbConfig.password,
-    )
-    if(dbConfig.isSQLite) TransactionManager.manager.defaultIsolationLevel = TRANSACTION_SERIALIZABLE
+    val userService by inject<UserService>()
+    val jwt by inject<JWTConfig>()
 
-    val userService = UserService(database)
     routing {
         route("/api") {
             get {
@@ -44,78 +36,42 @@ fun Application.configureApi() {
                             return@validate
                         }
 
-                        // ...
-                        val jwt = environment.jwtConfig()
+                        // todo 20250601 create session
 
                         val token = JWT.create()
                             .withAudience(jwt.audience)
                             .withIssuer(jwt.issuer)
-                            .withClaim("email", auth.email)
+                            .withClaim("email", user.email)
+                            .withClaim("sid", "any")
+                            .withClaim("id", user.id)
                             .withExpiresAt(Date(System.currentTimeMillis() + jwt.ttl * 1000))
                             .sign(Algorithm.HMAC256(jwt.secret))
-                        call.respond(hashMapOf(
-                            "email" to auth.email,
-                            "token" to token,
-                        ))
+                        call.respond(
+                            hashMapOf(
+                                "token" to token,
+                                "ttl" to jwt.ttl,
+                            )
+                        )
                     }
+                }
+                post("/register") {
+                    val register = call.receive<Register>()
+                    register.validate(this, Register.validator) {
+                        // check in database
+                        val user = userService.selectUser(register.email!!)
+                        if (user != null) {
+                            call.respond(HttpStatusCode.Conflict, "User already registered")
+                        } else {
+                            val a = userService.registerUser(register)
+                            call.respond(a)
+                        }
+                    }
+                }
+                get("/profile") {
+                    // todo 20250602 check auth
+
                 }
             }
         }
-    }
-}
-
-data class JWTConfig(
-    val secret: String,
-    val issuer: String,
-    val audience: String,
-    val realm: String,
-    val ttl: Int
-)
-
-fun ApplicationEnvironment.jwtConfig() = let { environment ->
-    JWTConfig(
-        secret = environment.config.property("jwt.secret").getString(),
-        issuer = environment.config.property("jwt.domain").getString(),
-        audience = environment.config.property("jwt.audience").getString(),
-        realm = environment.config.property("jwt.realm").getString(),
-        ttl = environment.config.property("jwt.ttl").getString().toInt(),
-    )
-}
-
-data class DBConfig(
-    val url: String,
-    val user: String,
-    val driver: String,
-    val password: String,
-) {
-    val isSQLite = driver.contains("sqlite", true)
-}
-
-fun ApplicationEnvironment.dbConfig() = let { environment ->
-    DBConfig(
-        url = environment.config.property("db.url").getString(),
-        driver = environment.config.property("db.driver").getString(),
-        user = environment.config.property("db.user").getString(),
-        password = environment.config.property("db.password").getString(),
-    )
-}
-
-class ValidationException(message: String) : RuntimeException(message)
-
-suspend fun RoutingContext.validate(validate: suspend () -> Unit, block: suspend () -> Unit) {
-    try {
-        validate()
-        block()
-    } catch (exception: ValidationException) {
-        call.respond(HttpStatusCode.BadRequest, exception.message ?: "ValidationException")
-    }
-}
-
-suspend fun <T> T.validate(context: RoutingContext, validate: suspend (T) -> Unit, block: suspend () -> Unit) {
-    try {
-        validate(this)
-        block()
-    } catch (exception: ValidationException) {
-        context.call.respond(HttpStatusCode.BadRequest, exception.message ?: "ValidationException")
     }
 }

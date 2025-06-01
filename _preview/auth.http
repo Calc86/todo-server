@@ -1,4 +1,19 @@
-POST {{server}}/api/login
+### Регистрация
+
+POST {{server}}/api/user/register
+Content-Type: application/json
+
+{
+  "name": "some user name",
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "device": "other",
+  "device_id": "{{uuid}}"
+}
+
+### Авторизация
+
+POST {{server}}/api/user/login
 Content-Type: application/json
 
 {
@@ -7,3 +22,24 @@ Content-Type: application/json
   "device": "other",
   "device_id": "{{uuid}}"
 }
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Авторизация неудачная
+
+POST {{server}}/api/user/login
+Content-Type: application/json
+
+{
+  "email": "asdasfda@asdasd.asd",
+  "password": "{{password}}",
+  "device": "other",
+  "device_id": "{{uuid}}"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
