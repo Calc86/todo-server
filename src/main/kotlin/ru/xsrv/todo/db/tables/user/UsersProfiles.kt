@@ -1,10 +1,12 @@
 package ru.xsrv.todo.ru.xsrv.todo.db.tables.user
 
-import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IdTable
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
-import ru.xsrv.todo.ru.xsrv.todo.db.tables.VAR_CHAR_MAX_LENGTH
+import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 
-object UsersProfiles : IntIdTable(Names.TABLE) {
+object UsersProfiles : IdTable<Int>(Names.TABLE) {
 
     val user = reference(Names.USER_ID, Users.id, onDelete = ReferenceOption.CASCADE)
     val name = varchar(Names.NAME, length = VAR_CHAR_MAX_LENGTH).uniqueIndex()
@@ -15,4 +17,9 @@ object UsersProfiles : IntIdTable(Names.TABLE) {
         const val USER_ID = "user_id"
         const val NAME = "name"
     }
+
+    override val primaryKey: PrimaryKey = PrimaryKey(user)
+
+    override val id: Column<EntityID<Int>>
+        get() = user
 }

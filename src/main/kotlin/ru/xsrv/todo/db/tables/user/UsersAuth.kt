@@ -4,7 +4,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
-import ru.xsrv.todo.ru.xsrv.todo.db.tables.VAR_CHAR_MAX_LENGTH
+import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 
 object UsersAuth : IntIdTable(Names.TABLE) {
 

@@ -2,7 +2,7 @@ package ru.xsrv.todo.ru.xsrv.todo.db.tables.shop
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
-import ru.xsrv.todo.ru.xsrv.todo.db.tables.VAR_CHAR_MAX_LENGTH
+import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 
 object ShopListHistoryImages : IntIdTable(Names.TABLE) {
 
