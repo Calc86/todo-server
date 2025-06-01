@@ -6,6 +6,19 @@ date
 email  - generated when empty
 password (hash) - nullable when auth
 status
+device
+device_id
+
++user_sessions
+---
+id
+user_id
+date
+closed
+device
+device_id
+push_type
+push
 
 +users_profiles
 ---

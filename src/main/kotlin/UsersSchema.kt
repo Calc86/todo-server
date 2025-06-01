@@ -7,9 +7,11 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 
+@Deprecated("use db package")
 @Serializable
 data class ExposedUser(val name: String, val age: Int)
 
+@Deprecated("use another UserService")
 class UserService(database: Database) {
     object Users : Table() {
         val id = integer("id").autoIncrement()

@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.xsrv.todo.ru.xsrv.todo.db.entities.UserEntity
-import ru.xsrv.todo.ru.xsrv.todo.db.schema.user.UserService
+import ru.xsrv.todo.ru.xsrv.todo.UserService
 
 fun main() {
     val database = Database.connect(
@@ -33,5 +33,8 @@ fun main() {
 
         val user = us.selectUser(2)!!
         println(user.profile.name)
+
+        val user2 = us.selectUser("a@b.ru", "12345" )
+        println(user2!!.id)
     }
 }

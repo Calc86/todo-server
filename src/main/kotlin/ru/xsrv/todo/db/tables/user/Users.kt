@@ -15,12 +15,21 @@ object Users : IntIdTable(Names.TABLE) {
     val email = varchar(Names.EMAIL, length = VAR_CHAR_MAX_LENGTH).uniqueIndex()
     val password = varchar(Names.PASSWORD, length = VAR_CHAR_MAX_LENGTH).nullable().default(null)
     val status = enumeration(Names.STATUS, Status::class).default(Status.NOT_CONFIRMED).index()
+    val device = enumeration(Names.DEVICE, Device::class).default(Device.OTHER)
+    val device_id = uuid(Names.DEVICE_ID).nullable().default(null)
 
     enum class Status {
         NOT_CONFIRMED,
         ENABLED,
         DELETED,
         BLOCKED,
+    }
+
+    enum class Device {
+        OTHER,
+        IOS,
+        ANDROID,
+        WEB
     }
 
     private object Names {
@@ -31,6 +40,7 @@ object Users : IntIdTable(Names.TABLE) {
         const val EMAIL = "email"
         const val PASSWORD = "password"
         const val STATUS = "status"
+        const val DEVICE = "device"
+        const val DEVICE_ID = "device_id"
     }
 }
-
