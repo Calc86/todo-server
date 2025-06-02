@@ -7,16 +7,31 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import ru.xsrv.todo.ru.xsrv.todo.ktor.ValidationException
+import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.ApiException
+import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.HttpException
+import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.NotImplementedException
+import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.ValidationException
 import ru.xsrv.todo.ru.xsrv.todo.models.ApiError
 
 fun Application.configureRouting() {
     val isDevMode = environment.config.propertyOrNull("ktor.development")?.getString().toBoolean()
 
     install(StatusPages) {
+        exception<ApiException> { call, cause ->
+            when (cause) {
+                is HttpException -> call.respond(
+                    status = cause.statusCode,
+                    message = ApiError(cause.statusCode.value, message = cause.message ?:"", cause.code)
+                )
+                else -> call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = ApiError(HttpStatusCode.InternalServerError.value, cause.message ?: "ApiException")
+                )
+            }
+        }
         exception<ValidationException> { call, cause ->
             if (call.request.path().startsWith("/api")) {
-                val trace = when(isDevMode) {
+                val trace = when (isDevMode) {
                     true -> cause.stackTraceToString().split("\n").map { it.trim() }.take(30)
                     false -> listOf()
                 }
@@ -35,8 +50,15 @@ fun Application.configureRouting() {
             )
         }
 
+        exception<NotImplementedException> { call, cause ->
+            call.respondText(
+                text = "501: $cause",
+                status = HttpStatusCode.NotImplemented
+            )
+        }
+
         exception<Throwable> { call, cause ->
-            val trace = when(isDevMode) {
+            val trace = when (isDevMode) {
                 //true -> cause.stackTraceToString().split("\n").map { it.trim() }.take(30).joinToString(separator = "<br>")
                 true -> cause.stackTraceToString().split("\n").map { it.trim() }.take(30).joinToString(separator = "\n")
                 false -> ""

@@ -1,7 +1,7 @@
 package ru.xsrv.todo.ru.xsrv.todo.db
 
 import org.mindrot.jbcrypt.BCrypt
-import ru.xsrv.todo.ru.xsrv.todo.ktor.ValidationException
+import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.ValidationException
 import kotlin.enums.EnumEntries
 
 const val VAR_CHAR_MAX_LENGTH = 255

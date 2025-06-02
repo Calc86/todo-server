@@ -6,10 +6,7 @@ import io.ktor.server.html.*
 import io.ktor.server.routing.*
 import kotlinx.html.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.xsrv.todo.ru.xsrv.todo.db.entities.ShopListEntity
-import ru.xsrv.todo.ru.xsrv.todo.db.entities.TagEntity
-import ru.xsrv.todo.ru.xsrv.todo.db.entities.TodoEntity
-import ru.xsrv.todo.ru.xsrv.todo.db.entities.UserEntity
+import ru.xsrv.todo.ru.xsrv.todo.db.entities.*
 
 fun Application.configureWebAdmin() {
     routing {
@@ -31,6 +28,12 @@ fun Application.configureWebAdmin() {
                                     a {
                                         href = "/admin/users"
                                         +"users"
+                                    }
+                                }
+                                li {
+                                    a {
+                                        href = "/admin/sessions"
+                                        +"sessions"
                                     }
                                 }
                                 li {
@@ -89,6 +92,49 @@ fun Application.configureWebAdmin() {
                                             td { +it.password.toString() }
                                             td { +it.status.toString() }
                                             //td { +it.profile.toString() }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                route("/sessions") {
+                    get {
+                        val sessions = transaction {
+                            UserSessionEntity.all().offset(0).limit(100).toList()
+                        }
+
+                        call.respondHtml {
+                            head {
+                                link(rel = "stylesheet", href = "/styles.css", type = "text/css")
+                            }
+                            body {
+                                h1(classes = "page-title") {
+                                    +"Sessions"
+                                }
+                                table {
+                                    tr {
+                                        th { +"id" }
+                                        th { +"userId" }
+                                        th { +"date" }
+                                        th { +"closed" }
+                                        th { +"device" }
+                                        th { +"deviceId" }
+                                        th { +"pushType" }
+                                        th { +"push" }
+                                    }
+                                    sessions.forEach {
+                                        tr {
+                                            td { +it.id.toString() }
+                                            td { +it.userId.toString() }
+                                            td { +it.date.toString() }
+                                            td { +it.closed.toString() }
+                                            td { +it.device.toString() }
+                                            td { +it.deviceId.toString() }
+                                            td { +it.pushType.toString() }
+                                            td { +it.push.toString() }
                                         }
                                     }
                                 }

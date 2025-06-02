@@ -39,8 +39,14 @@ fun Application.configureTemplating() {
                 table {
                     width = 100.pct
                 }
+                td {
+                    textAlign = TextAlign.center
+                }
                 rule("h1.page-title") {
                     color = Color.black
+                }
+                rule("td.left") {
+                    textAlign = TextAlign.left
                 }
             }
         }

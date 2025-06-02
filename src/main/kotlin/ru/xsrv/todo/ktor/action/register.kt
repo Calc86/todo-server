@@ -5,6 +5,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.*
+import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.HttpException
 import ru.xsrv.todo.ru.xsrv.todo.ktor.validate
 import ru.xsrv.todo.ru.xsrv.todo.models.requests.Register
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
@@ -18,11 +19,8 @@ fun Route.userRegister(
     register.validate(this, Register.validator) {
         // check in database
         val user = userService.selectUser(register.email!!)
-        if (user != null) {
-            call.respond(HttpStatusCode.Conflict, "User already registered")
-        } else {
-            val a = userService.registerUser(register)
-            call.respond(a)
-        }
+        if (user != null) throw HttpException(HttpStatusCode.Conflict, "User already registered")
+
+        call.respond(userService.registerUser(register))
     }
 }

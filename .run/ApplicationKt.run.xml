@@ -1,0 +1,26 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ApplicationKt" type="KtorApplicationConfigurationType" factoryName="Ktor" nameIsGenerated="true">
+    <option name="ALTERNATIVE_JRE_PATH" value="liberica-17" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="MAIN_CLASS_NAME" value="ru.xsrv.todo.ApplicationKt" />
+    <module name="todo-server.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="ru.xsrv.todo.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="alternativeJrePath" value="liberica-17" />
+    <option name="alternativeJrePathEnabled" value="true" />
+    <option name="includeProvidedScope" value="false" />
+    <option name="mainClass" value="ru.xsrv.todo.ApplicationKt" />
+    <option name="passParentEnvs" value="true" />
+    <option name="programParameters" value="" />
+    <option name="shortenCommandLine" />
+    <option name="vmParameters" />
+    <option name="workingDirectory" value="E:\work\todo-server" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -17,6 +17,8 @@ import ru.xsrv.todo.ru.xsrv.todo.ktor.BasicAdminConfig
 import ru.xsrv.todo.ru.xsrv.todo.ktor.Constants
 import ru.xsrv.todo.ru.xsrv.todo.ktor.JWTConfig
 import ru.xsrv.todo.ru.xsrv.todo.ktor.UserPrincipal
+import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.ApiException
+import ru.xsrv.todo.ru.xsrv.todo.services.AuthService
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 
 fun Application.configureSecurity() {
@@ -55,6 +57,7 @@ fun Application.configureSecurity() {
     // Please read the jwt property from the config file if you are using EngineMain
     val jwt by inject<JWTConfig>()
     val userService by inject<UserService>()
+    val authService by inject<AuthService>()
     authentication {
         jwt {
             realm = jwt.realm
@@ -66,12 +69,20 @@ fun Application.configureSecurity() {
                     .build()
             )
             validate { credential ->
-                // todo 20250602 check is session exists
-                // todo 20250602 check is session closed
                 val userId = credential.payload.getClaim(UserPrincipal.CLAIM_ID).asInt()
+                val sessionId = credential.payload.getClaim(UserPrincipal.CLAIM_SID).asInt()
+                // check is session exists
+                val session = authService.select(sessionId) ?: throw ApiException("session not found", 1)
+                // check is session closed
+                if (session.closed == 1) throw ApiException("session closed", 1)
+
                 val user = userService.selectUser(userId)!!
 //                if (credential.payload.audience.contains(jwt.audience)) JWTPrincipal(credential.payload) else null
-                if (credential.payload.audience.contains(jwt.audience)) UserPrincipal(user, null, credential.payload) else null
+                if (credential.payload.audience.contains(jwt.audience)) UserPrincipal(
+                    user,
+                    sessionId,
+                    credential.payload
+                ) else null
             }
             challenge { defaultScheme, realm ->
                 call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")

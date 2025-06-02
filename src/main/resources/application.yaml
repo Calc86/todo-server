@@ -24,8 +24,9 @@ jwt:  # JWT для /api
   audience: "jwt-audience"
   realm: "ktor todo app"
   secret: "shared_jwt_secret_change_after_deploy!!"
-  ttl: 60
-  #ttl: 86400 #сутки
+#  ttl: 60 # минута
+  ttl: 86400 # сутки
+  refresh-ttl: 2592000 # 30 дней
 
 auth:
   basic-admin-auth: # доступ к /admin панели

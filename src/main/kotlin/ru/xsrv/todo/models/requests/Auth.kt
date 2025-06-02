@@ -7,6 +7,7 @@ import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 import ru.xsrv.todo.ru.xsrv.todo.db.validateEnum
 import ru.xsrv.todo.ru.xsrv.todo.db.validateNotBlankOrNull
 import ru.xsrv.todo.ru.xsrv.todo.db.validateUUID
+import java.util.*
 
 typealias Validator<T> = (T) -> Unit
 
@@ -29,4 +30,10 @@ data class Auth(
             auth.device_id.validateUUID("device_id")
         }
     }
+
+    val deviceType: Users.Device
+        get() = Users.Device.valueOf(device!!.uppercase())
+
+    val deviceId: UUID
+        get() = UUID.fromString(device_id)
 }

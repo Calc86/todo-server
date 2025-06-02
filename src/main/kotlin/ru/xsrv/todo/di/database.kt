@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.koin.dsl.module
 import ru.xsrv.todo.ru.xsrv.todo.ktor.DBConfig
+import ru.xsrv.todo.ru.xsrv.todo.services.AuthService
 import ru.xsrv.todo.ru.xsrv.todo.services.ShopListService
 import ru.xsrv.todo.ru.xsrv.todo.services.TodoService
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
@@ -32,6 +33,7 @@ fun Application.koinDatabase() = module {
     }
 
     single { UserService(get()) }
+    single { AuthService(get(), get()) }
     single { TodoService(get()) }
     single { ShopListService(get()) }
 }

@@ -5,5 +5,6 @@ data class JWTConfig(
     val issuer: String,
     val audience: String,
     val realm: String,
-    val ttl: Int
+    val ttl: Int,
+    val refreshTtl: Int,
 )

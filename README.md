@@ -66,3 +66,27 @@ If the server starts successfully, you'll see the following output:
 2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
 ```
 
+## Описание
+
+Запускать в Idea
+
+./tmp/db данные по базе данных
+
+./data/data.db SQlite база данных (можно удалять для тестов с нуля)
+
+./kotlin/Administration.kt запуск сервера с java 17
+
+mm.png заложено в БД, но не реализовано пока
+
+./_preview запросы HTTP из idea для теста API
+
+Реализовано
+- Регистрация
+- Авторизация
+- Получение токена
+- Получение refresh токена
+- обновление токенов
+- получение профиля
+- Прописаны основные Entities для работы с БД
+- немного админ панели, чтобы не лезть в базу
+- всякие todo

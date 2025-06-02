@@ -14,6 +14,7 @@ fun Application.koinSecret() = module {
             audience = environment.config.property("jwt.audience").getString(),
             realm = environment.config.property("jwt.realm").getString(),
             ttl = environment.config.property("jwt.ttl").getString().toInt(),
+            refreshTtl = environment.config.property("jwt.refresh-ttl").getString().toInt()
         )
     }
     single {

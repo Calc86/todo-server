@@ -48,3 +48,35 @@ Content-Type: application/json
 GET {{server}}/api/user/profile
 accept: application/json
 Authorization: Bearer {{auth_token}}
+
+### проверить auth token
+
+GET {{server}}/api/auth/check
+accept: application/json
+Authorization: Bearer {{auth_token}}
+
+### Получить refresh token
+
+GET {{server}}/api/auth/refresh-token
+accept: application/json
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.global.set("refresh_token", response.body.token);
+%}
+
+### обновить auth token
+
+GET {{server}}/api/auth/refresh
+accept: application/json
+Authorization: Bearer {{refresh_token}}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### проверить refresh token
+
+GET {{server}}/api/auth/check
+accept: application/json
+Authorization: Bearer {{refresh_token}}
