@@ -8,7 +8,7 @@ import ru.xsrv.todo.ru.xsrv.todo.db.tables.shop.ShopLists
 class ShopListEntity(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<ShopListEntity>(ShopLists)
 
-    var user by UserEntity referencedOn ShopLists.user
+    var user by ShopLists.user
     var list by ShopLists.list
     var title by ShopLists.title
     var description by ShopLists.description

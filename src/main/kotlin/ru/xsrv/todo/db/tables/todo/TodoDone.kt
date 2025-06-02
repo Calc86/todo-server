@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 object TodoDone : IntIdTable(Names.TABLE) {
 
     val todo = reference(Names.TODO_ID, Todos.id, onDelete = ReferenceOption.CASCADE)
-    val repeating = reference(Names.REPEATING_ID, TodoRepeating.id, onDelete = ReferenceOption.CASCADE)
+    val repeating = reference(Names.REPEATING_ID, TodoRepeating.id, onDelete = ReferenceOption.CASCADE).nullable().default(null)
     val date = datetime(Names.DATE).defaultExpression(CurrentDateTime).index()
     val comment = text(Names.COMMENT).default("")
 

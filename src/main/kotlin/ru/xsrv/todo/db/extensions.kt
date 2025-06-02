@@ -10,6 +10,8 @@ typealias Mapper<T, R> = (T) -> R
 
 class UnknownInsertErrorException(message: String? = null) : Exception("Unknown InsertErrorException ${message ?: ""}")
 
+class DBException(message: String? = null) : Exception("DB exception ${message ?: ""}")
+
 fun <T> Boolean.returnOnTrueOrNull(data: T): T? = when(this) {
     true -> data
     false -> null

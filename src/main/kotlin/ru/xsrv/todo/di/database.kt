@@ -4,8 +4,10 @@ import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.koin.dsl.module
-import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 import ru.xsrv.todo.ru.xsrv.todo.ktor.DBConfig
+import ru.xsrv.todo.ru.xsrv.todo.services.ShopListService
+import ru.xsrv.todo.ru.xsrv.todo.services.TodoService
+import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 import java.sql.Connection.TRANSACTION_SERIALIZABLE
 
 fun Application.koinDatabase() = module {
@@ -30,4 +32,6 @@ fun Application.koinDatabase() = module {
     }
 
     single { UserService(get()) }
+    single { TodoService(get()) }
+    single { ShopListService(get()) }
 }
