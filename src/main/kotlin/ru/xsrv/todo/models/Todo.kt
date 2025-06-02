@@ -4,13 +4,16 @@ import kotlinx.serialization.Serializable
 import ru.xsrv.todo.ru.xsrv.todo.db.Mapper
 import ru.xsrv.todo.ru.xsrv.todo.db.entities.TodoEntity
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.todo.Todos
+import ru.xsrv.todo.ru.xsrv.todo.db.validateEnum
+import ru.xsrv.todo.ru.xsrv.todo.db.validateNotBlankOrNull
+import ru.xsrv.todo.ru.xsrv.todo.models.requests.Validator
 
 @Serializable
 data class Todo(
     val id: Int,
     val title: String,
     val description: String,
-    val status: Todos.Status,
+    val status: String,
     // todo 20250602 add other fields
 ) {
     companion object {
@@ -19,8 +22,13 @@ data class Todo(
                 todo.id.value,
                 todo.title,
                 todo.description,
-                todo.status,
+                todo.status.toString(),
             )
+        }
+
+        val validator: Validator<Todo> = { todo ->
+            todo.title.validateNotBlankOrNull("name")
+            todo.status.validateEnum(Todos.Status.entries, "status")
         }
     }
 }

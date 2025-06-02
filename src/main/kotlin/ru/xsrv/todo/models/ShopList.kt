@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import ru.xsrv.todo.ru.xsrv.todo.db.Mapper
 import ru.xsrv.todo.ru.xsrv.todo.db.entities.ShopListEntity
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.shop.ShopLists
+import ru.xsrv.todo.ru.xsrv.todo.models.requests.Validator
 
 @Serializable
 data class ShopList(
@@ -28,6 +29,9 @@ data class ShopList(
                 list.status,
                 list.comment
             )
+        }
+        val validator: Validator<ShopList> = { shopList ->
+            // todo 20250602 validate
         }
     }
 }

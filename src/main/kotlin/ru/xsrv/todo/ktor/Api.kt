@@ -3,6 +3,7 @@ package ru.xsrv.todo.ru.xsrv.todo.ktor
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
@@ -10,6 +11,8 @@ import ru.xsrv.todo.ru.xsrv.todo.ktor.action.userLogin
 import ru.xsrv.todo.ru.xsrv.todo.ktor.action.userProfile
 import ru.xsrv.todo.ru.xsrv.todo.ktor.action.userRegister
 import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.ValidationException
+import ru.xsrv.todo.ru.xsrv.todo.models.ShopList
+import ru.xsrv.todo.ru.xsrv.todo.models.Todo
 import ru.xsrv.todo.ru.xsrv.todo.services.AuthService
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 
@@ -73,10 +76,58 @@ fun Application.configureApi() {
             }
 
             route("/todo") {
-
+                authenticate {
+                    post("/create") {
+                        val principal = call.principal<UserPrincipal>()!!
+                        val todo = call.receive<Todo>()
+                        todo.validate(this, Todo.validator) {
+                            // todo 20250602 create todo
+                        }
+                    }
+                    post("/update") {
+                        val principal = call.principal<UserPrincipal>()!!
+                        val todo = call.receive<Todo>()
+                        todo.validate(this, Todo.validator) {
+                            // todo 20250602 update todo
+                        }
+                    }
+                    post("/done") {
+                        val principal = call.principal<UserPrincipal>()!!
+                        val todo = call.receive<Todo>() // todo 20250602 may be int id
+                        // todo 20250602 done todo
+                    }
+                    post("/delete") {
+                        val principal = call.principal<UserPrincipal>()!!
+                        val todo = call.receive<Todo>() // todo 20250602 may be int id
+                        // todo 20250602 delete todo
+                    }
+                }
             }
             route("shop-list") {
-
+                post("/create") {
+                    val principal = call.principal<UserPrincipal>()!!
+                    val todo = call.receive<ShopList>()
+                    todo.validate(this, ShopList.validator) {
+                        // todo 20250602 create todo
+                    }
+                }
+                post("/update") {
+                    val principal = call.principal<UserPrincipal>()!!
+                    val todo = call.receive<ShopList>()
+                    todo.validate(this, ShopList.validator) {
+                        // todo 20250602 update todo
+                    }
+                }
+                post("/done") {
+                    val principal = call.principal<UserPrincipal>()!!
+                    val todo = call.receive<ShopList>() // todo 20250602 may be int id
+                    // todo 20250602 done todo
+                }
+                post("/delete") {
+                    val principal = call.principal<UserPrincipal>()!!
+                    val todo = call.receive<ShopList>() // todo 20250602 may be int id
+                    // todo 20250602 delete todo
+                }
             }
         }
     }
