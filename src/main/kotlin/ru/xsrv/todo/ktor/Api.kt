@@ -14,7 +14,13 @@ fun Application.configureApi() {
     val jwt by inject<JWTConfig>()
 
     routing {
+        get("/throw-validation") {
+            throw ValidationException("throw-validation")   // 400 html
+        }
         route("/api") {
+            get("/throw-validation") {
+                throw ValidationException("throw-validation")   // 400 json
+            }
             get {
                 call.respondText("Api blank page")
             }
@@ -29,9 +35,7 @@ fun Application.configureApi() {
 //                authenticate(optional = true) {// optional throw token expired, and work without token
                 authenticate {
                     get("/profile") {
-                        // todo 20250602 check auth
                         val principal = call.principal<UserPrincipal>()!!
-                        //val username = principal!!.payload.getClaim("username").asString()
                         call.respond(principal.user)
                     }
                 }

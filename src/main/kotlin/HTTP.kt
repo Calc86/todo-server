@@ -30,9 +30,14 @@ fun Application.configureHTTP() {
     install(DefaultHeaders) {
         header("X-Engine", "Ktor") // will send this header with each response
     }
-    install(ForwardedHeaders) // WARNING: for security, do not include this if not behind a reverse proxy
-    install(XForwardedHeaders) // WARNING: for security, do not include this if not behind a reverse proxy
-    routing {
+
+    val isBehindProxy = environment.config.propertyOrNull("ktor.behind-proxy")?.getString().toBoolean()
+    if(isBehindProxy) {
+        install(ForwardedHeaders) // WARNING: for security, do not include this if not behind a reverse proxy
+        install(XForwardedHeaders) // WARNING: for security, do not include this if not behind a reverse proxy
+    }
+
+    routing {// todo 20250602 secure
         openAPI(path = "openapi")
     }
     install(SimpleCache) {
@@ -40,7 +45,7 @@ fun Application.configureHTTP() {
             invalidateAt = 10.seconds
         }
     }
-    routing {
+    routing {// todo 20250602 secure
         swaggerUI(path = "openapi")
     }
     routing {

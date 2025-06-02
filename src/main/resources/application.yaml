@@ -8,8 +8,9 @@ ktor:
       - classes
       - resources
   development: true
+  behind-proxy: false
 
-db:
+db: # база данных, in-memory не работает с текущими настройками движка ktor, можно найти в db пакете Main.kt и поиграть с in-memory для тестов
   #url: "jdbc:sqlite:file:test?mode=memory&cache=shared"
   url: "jdbc:sqlite:./data/data.db"
   #url: "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
@@ -18,10 +19,15 @@ db:
   #driver: "org.h2.Driver"
   password: ""
 
-jwt:
+jwt:  # JWT для /api
   domain: "https://jwt-provider-domain/"
   audience: "jwt-audience"
   realm: "ktor todo app"
   secret: "shared_jwt_secret_change_after_deploy!!"
   ttl: 60
-  #ttl: 86400
+  #ttl: 86400 #сутки
+
+auth:
+  basic-admin-auth: # доступ к /admin панели
+    user: admin
+    password: admin

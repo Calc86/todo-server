@@ -13,25 +13,25 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import org.koin.ktor.ext.inject
-import ru.xsrv.todo.ru.xsrv.todo.services.UserService
+import ru.xsrv.todo.ru.xsrv.todo.ktor.BasicAdminConfig
+import ru.xsrv.todo.ru.xsrv.todo.ktor.Constants
 import ru.xsrv.todo.ru.xsrv.todo.ktor.JWTConfig
 import ru.xsrv.todo.ru.xsrv.todo.ktor.UserPrincipal
+import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 
 fun Application.configureSecurity() {
-//    val secret = environment.config.property("jwt.secret").getString()
-//    val issuer = environment.config.property("jwt.domain").getString()
-//    val audience = environment.config.property("jwt.audience").getString()
-//    val myRealm = environment.config.property("jwt.realm").getString()
-
-//    authentication {
-//
-//        jwt {
-//
-//        }
-//    }
-
-    // default generated bellow
+    val basicAdmin by inject<BasicAdminConfig>()
     authentication {
+        basic(Constants.Authentication.ADMIN_AUTH) {
+            realm = "Ktor Server Admin"
+            validate { credentials ->
+                if (credentials.name == basicAdmin.user && credentials.password == basicAdmin.password) {
+                    UserIdPrincipal(credentials.name)
+                } else {
+                    null
+                }
+            }
+        }
         basic(name = "myauth1") {
             realm = "Ktor Server"
             validate { credentials ->

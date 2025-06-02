@@ -32,11 +32,15 @@ fun Application.configureTemplating() {
         get("/styles.css") {
             call.respondCss {
                 body {
-                    backgroundColor = Color.darkBlue
+                    backgroundColor = Color.lightGray
                     margin(0.px)
+                    padding(16.px)
+                }
+                table {
+                    width = 100.pct
                 }
                 rule("h1.page-title") {
-                    color = Color.white
+                    color = Color.black
                 }
             }
         }
