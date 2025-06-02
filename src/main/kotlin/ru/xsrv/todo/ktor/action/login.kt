@@ -6,6 +6,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.utils.io.*
 import ru.xsrv.todo.ru.xsrv.todo.ktor.JWTConfig
 import ru.xsrv.todo.ru.xsrv.todo.ktor.UserPrincipal
 import ru.xsrv.todo.ru.xsrv.todo.ktor.validate
@@ -13,6 +14,7 @@ import ru.xsrv.todo.ru.xsrv.todo.models.requests.Auth
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 import java.util.*
 
+@KtorDsl
 fun Route.userLogin(
     path: String,
     userService: UserService,

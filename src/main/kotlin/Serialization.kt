@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
         gson {
-            registerTypeAdapter(LocalDateTime::class.java, TimeSerializer())
+//            registerTypeAdapter(LocalDateTime::class.java, TimeSerializer())
         }
 //        jackson {
 //            registerModule(JavaTimeModule())

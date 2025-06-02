@@ -4,10 +4,12 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.utils.io.*
 import ru.xsrv.todo.ru.xsrv.todo.ktor.validate
 import ru.xsrv.todo.ru.xsrv.todo.models.requests.Register
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 
+@KtorDsl
 fun Route.userRegister(
     path: String,
     userService: UserService,
