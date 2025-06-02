@@ -47,4 +47,4 @@ Content-Type: application/json
 
 GET {{server}}/api/user/profile
 accept: application/json
-#Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{auth_token}}

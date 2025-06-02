@@ -29,6 +29,7 @@ class ShopListService(
         val userEntity =
             UserEntity.findById(userId) ?: throw UnknownInsertErrorException("UserEntity not found for id $userId")
         // todo 20250602 add tags
+//        val id = EntityID(userId, ShopLists)
         ShopListEntity.new {
             this.user = userEntity.id
             // todo 20250602 list as null for repeating
