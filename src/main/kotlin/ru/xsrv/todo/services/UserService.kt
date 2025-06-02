@@ -70,8 +70,7 @@ class UserService(
 
     suspend fun selectUser(email: String, password: String): User? = dbQuery {
         UserEntity.find {
-            Users.email eq email
-            Users.password.isNotNull()
+            Users.email eq email and Users.password.isNotNull()
         }
             .firstOrNull()
             ?.let { password.checkPassword(it.password).returnOnTrueOrNull(it) }
