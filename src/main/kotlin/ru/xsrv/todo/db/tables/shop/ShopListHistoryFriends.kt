@@ -6,6 +6,9 @@ import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 
+/**
+ * Делимся историей покупок с другом. Делим отдельно, так как есть завяка за комментарий/магазин
+ */
 object ShopListHistoryFriends : Table(Names.TABLE) {
 
     val history = reference(Names.HISTORY_ID, ShopListHistory.id, onDelete = ReferenceOption.CASCADE)

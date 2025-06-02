@@ -6,13 +6,23 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 
+/**
+ * Наши задачи
+ */
 object Todos : IntIdTable(Names.TABLE) {
 
     val user = reference(Names.USER_ID, Users.id, onDelete = ReferenceOption.CASCADE)
     val type = enumeration(Names.TYPE, Types::class).default(Types.ANYTIME)
+    /** Будем повторять */
     val repeating = enumeration(Names.REPEATING, Repeating::class).default(Repeating.NO)
+
+    /** когда начать */
     val date1 = datetime(Names.DATE1).nullable().default(null)
+
+    /** когда закончить */
     val date2 = datetime(Names.DATE2).nullable().default(null)
+
+    /** если локальная задача, привязана к конкретному времени региона */
     val dateTZ = integer(Names.DATE_TZ).default(0)
     val title = varchar(Names.TITLE, VAR_CHAR_MAX_LENGTH)
     val description = varchar(Names.DESCRIPTION, VAR_CHAR_MAX_LENGTH)
@@ -41,7 +51,9 @@ object Todos : IntIdTable(Names.TABLE) {
     enum class Status {
         DONE,
         NEW,
+        /** Повторили задачу */
         REPEATED,
+        /** Отложили задачу */
         DELAY
     }
 

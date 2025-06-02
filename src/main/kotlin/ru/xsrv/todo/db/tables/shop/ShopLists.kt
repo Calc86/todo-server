@@ -7,9 +7,16 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 
+/**
+ * Элемент списка покупки
+ */
 object ShopLists : IntIdTable(Names.TABLE) {
 
     val user = reference(Names.USER_ID, Users.id, onDelete = ReferenceOption.CASCADE)
+
+    /**
+     * Повторная покупка для сохранения истории или функции "повторить"
+     */
     val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
     val title = varchar(Names.TITLE, length = VAR_CHAR_MAX_LENGTH)
     val description = text(Names.DESCRIPTION)

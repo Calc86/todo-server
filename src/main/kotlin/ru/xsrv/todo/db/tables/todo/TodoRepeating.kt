@@ -3,6 +3,9 @@ package ru.xsrv.todo.ru.xsrv.todo.db.tables.todo
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
+/**
+ * Если нужно что то повторить, то указываем время когад это нужно повторять и как часто
+ */
 object TodoRepeating : IntIdTable(Names.TABLE) {
 
     val todo = reference(Names.TODO_ID, Todos.id, onDelete = ReferenceOption.CASCADE)

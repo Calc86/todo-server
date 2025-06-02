@@ -6,6 +6,9 @@ import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 
+/**
+ * Попросить "помощь зала". Пусть друг это сделает
+ */
 object TodoFriends : Table(Names.TABLE) {
 
     val todo = reference(Names.TODO_ID, Todos.id, onDelete = ReferenceOption.CASCADE)

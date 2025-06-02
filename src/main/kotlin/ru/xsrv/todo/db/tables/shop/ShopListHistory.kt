@@ -9,15 +9,22 @@ import ru.xsrv.todo.ru.xsrv.todo.db.tables.shop.ShopLists.Units
 
 object ShopListHistory : IntIdTable(Names.TABLE) {
 
+    /** история элемента, создаем при завершении покупки */
     val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
     val date = datetime(Names.DATE).defaultExpression(CurrentDateTime).index()
 
+    /** можно сохрнаить штрихкод */
     val barcode_type = varchar(Names.BARCODE_TYPE, length = VAR_CHAR_MAX_LENGTH).nullable().default(null)
     val barcode = varchar(Names.BARCODE, length = VAR_CHAR_MAX_LENGTH).nullable().default(null)
+
+    /** сохраняе вес/количество */
     val unit = enumeration(Names.UNIT, Units::class)
     val unitValue = float(Names.UNIT_VALUE).default(1f)
+
+    /** сохраняем цену */
     val price_unit = enumeration(Names.PRICE_UNIT, PriceUnit::class).nullable().default(null)
     val price = float(Names.PRICE).nullable().default(null)
+
     val comment = text(Names.COMMENT).default("")
 
     enum class PriceUnit {

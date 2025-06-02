@@ -3,6 +3,9 @@ package ru.xsrv.todo.ru.xsrv.todo.db.tables.shop
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
+/**
+ * записываем где купили
+ */
 object ShopListHistoryMarkets : IntIdTable(Names.TABLE) {
 
     val history = reference(Names.HISTORY_ID, ShopListHistory.id, onDelete = ReferenceOption.CASCADE)

@@ -8,7 +8,9 @@ import ru.xsrv.todo.ru.xsrv.todo.db.tables.user.Users
 
 object ShopListFriends : Table(Names.TABLE) {
 
+    /** Какой элемент передаем другу */
     val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
+    /** Друг */
     val user = reference(Names.USER_ID, Users.id, onDelete = ReferenceOption.CASCADE)
     val date = datetime(Names.DATE).defaultExpression(CurrentDateTime)
     val comment = text(Names.COMMENT).default("")

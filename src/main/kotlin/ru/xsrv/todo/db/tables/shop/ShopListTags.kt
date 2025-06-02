@@ -4,6 +4,9 @@ import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.Tags
 
+/**
+ * связываем с тегами, например "еда", "лекарства"
+ */
 object ShopListTags : Table(Names.TABLE) {
 
     val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)

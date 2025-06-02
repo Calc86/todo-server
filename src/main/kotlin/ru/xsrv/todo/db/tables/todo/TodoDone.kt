@@ -5,6 +5,9 @@ import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
+/**
+ * задача была выполнена, сохраним историю
+ */
 object TodoDone : IntIdTable(Names.TABLE) {
 
     val todo = reference(Names.TODO_ID, Todos.id, onDelete = ReferenceOption.CASCADE)

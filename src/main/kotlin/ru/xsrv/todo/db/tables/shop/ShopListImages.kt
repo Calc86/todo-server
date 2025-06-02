@@ -4,6 +4,9 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import ru.xsrv.todo.ru.xsrv.todo.db.VAR_CHAR_MAX_LENGTH
 
+/**
+ * Картинка того, что надо купить
+ */
 object ShopListImages : IntIdTable(Names.TABLE) {
 
     val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)

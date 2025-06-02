@@ -71,6 +71,13 @@ fun Application.configureApi() {
                     }
                 }
             }
+
+            route("/todo") {
+
+            }
+            route("shop-list") {
+
+            }
         }
     }
 }

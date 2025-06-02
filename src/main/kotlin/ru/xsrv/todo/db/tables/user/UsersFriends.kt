@@ -11,6 +11,7 @@ object UsersFriends : Table(Names.TABLE) {
     val user1 = UsersProfiles.reference(Names.USER_ID1, Users.id, onDelete = ReferenceOption.CASCADE)
     val user2 = UsersProfiles.reference(Names.USER_ID2, Users.id, onDelete = ReferenceOption.CASCADE)
     val date = datetime(Names.DATE).defaultExpression(CurrentDateTime).index()
+    /** Кто этот друг */
     val title = varchar(Names.TITLE, length = VAR_CHAR_MAX_LENGTH).uniqueIndex()
 
     override val primaryKey = PrimaryKey(user1, user2)
