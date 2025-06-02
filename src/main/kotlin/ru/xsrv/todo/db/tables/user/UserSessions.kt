@@ -11,10 +11,14 @@ object UserSessions : IntIdTable(Names.TABLE) {
     val user = reference(Names.USER_ID, Users.id, onDelete = ReferenceOption.CASCADE).nullable().default(null)  // null - anonymous
 
     val date = datetime(Names.DATE).defaultExpression(CurrentDateTime).index()
+    /** Если сессия закрыта, то все запросы с токеном отвергнуты */
     val closed = integer(Names.CLOSED).default(0).index()
     val device = enumeration(Names.DEVICE, Users.Device::class).default(Users.Device.OTHER).index()
+    /** Можно иметь только одну открытую сессию для конкретного устройства */
     val device_id = uuid(Names.DEVICE_ID).nullable().default(null)
+    /** чей токет, фаербейз, хуавей и т.д. */
     val pushType = enumeration(Names.PUSH_TYPE, PushTypes::class).default(PushTypes.UNKNOWN)
+    /** Пуш токен */
     val push = varchar(Names.PUSH, VAR_CHAR_MAX_LENGTH).nullable().default(null)
 
     enum class PushTypes {
