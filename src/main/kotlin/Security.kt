@@ -13,21 +13,29 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import org.koin.ktor.ext.inject
-import ru.xsrv.todo.ru.xsrv.todo.ktor.BasicAdminConfig
-import ru.xsrv.todo.ru.xsrv.todo.ktor.Constants
-import ru.xsrv.todo.ru.xsrv.todo.ktor.JWTConfig
-import ru.xsrv.todo.ru.xsrv.todo.ktor.UserPrincipal
+import ru.xsrv.todo.ru.xsrv.todo.ktor.*
 import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.ApiException
 import ru.xsrv.todo.ru.xsrv.todo.services.AuthService
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 
 fun Application.configureSecurity() {
     val basicAdmin by inject<BasicAdminConfig>()
+    val basicDoc by inject<BasicDocConfig>()
     authentication {
         basic(Constants.Authentication.ADMIN_AUTH) {
             realm = "Ktor Server Admin"
             validate { credentials ->
                 if (credentials.name == basicAdmin.user && credentials.password == basicAdmin.password) {
+                    UserIdPrincipal(credentials.name)
+                } else {
+                    null
+                }
+            }
+        }
+        basic(Constants.Authentication.DOC_AUTH) {
+            realm = "Ktor Server Documentation"
+            validate { credentials ->
+                if (credentials.name == basicDoc.user && credentials.password == basicDoc.password) {
                     UserIdPrincipal(credentials.name)
                 } else {
                     null

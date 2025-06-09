@@ -6,6 +6,7 @@ import com.ucasoft.ktor.simpleMemoryCache.memoryCache
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.plugins.defaultheaders.*
@@ -14,6 +15,7 @@ import io.ktor.server.plugins.openapi.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import ru.xsrv.todo.ru.xsrv.todo.ktor.Constants
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
@@ -32,13 +34,16 @@ fun Application.configureHTTP() {
     }
 
     val isBehindProxy = environment.config.propertyOrNull("ktor.behind-proxy")?.getString().toBoolean()
-    if(isBehindProxy) {
+    if (isBehindProxy) {
         install(ForwardedHeaders) // WARNING: for security, do not include this if not behind a reverse proxy
         install(XForwardedHeaders) // WARNING: for security, do not include this if not behind a reverse proxy
     }
 
-    routing {// todo 20250602 secure
-        openAPI(path = "openapi")
+    routing {
+        // https://www.jetbrains.com/help/idea/ktor.html#openapi
+        authenticate(Constants.Authentication.DOC_AUTH) {
+            openAPI(path = "openapi")
+        }
     }
     install(SimpleCache) {
         memoryCache {
@@ -46,7 +51,9 @@ fun Application.configureHTTP() {
         }
     }
     routing {// todo 20250602 secure
-        swaggerUI(path = "openapi")
+        authenticate(Constants.Authentication.DOC_AUTH) {
+            swaggerUI(path = "openapi")
+        }
     }
     routing {
         cacheOutput(2.seconds) {

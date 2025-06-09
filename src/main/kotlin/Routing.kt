@@ -3,6 +3,7 @@ package ru.xsrv.todo
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
+import io.ktor.server.plugins.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -17,12 +18,31 @@ fun Application.configureRouting() {
     val isDevMode = environment.config.propertyOrNull("ktor.development")?.getString().toBoolean()
 
     install(StatusPages) {
+        exception<BadRequestException> { call, cause ->
+            if(call.request.path().startsWith("/api")) {    // todo 20250607 check for not /api exception
+                val trace = when (isDevMode) {
+                    true -> cause.stackTraceToString().split("\n").map { it.trim() }.take(30)
+                    false -> listOf()
+                }
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    ApiError(
+                        status = HttpStatusCode.BadRequest.value,
+                        message = cause.message ?: "",
+                        code = 0,
+                        trace = trace,
+                    )
+                )
+            }
+
+        }
         exception<ApiException> { call, cause ->
             when (cause) {
                 is HttpException -> call.respond(
                     status = cause.statusCode,
-                    message = ApiError(cause.statusCode.value, message = cause.message ?:"", cause.code)
+                    message = ApiError(cause.statusCode.value, message = cause.message ?: "", cause.code)
                 )
+
                 else -> call.respond(
                     status = HttpStatusCode.InternalServerError,
                     message = ApiError(HttpStatusCode.InternalServerError.value, cause.message ?: "ApiException")
@@ -59,7 +79,6 @@ fun Application.configureRouting() {
 
         exception<Throwable> { call, cause ->
             val trace = when (isDevMode) {
-                //true -> cause.stackTraceToString().split("\n").map { it.trim() }.take(30).joinToString(separator = "<br>")
                 true -> cause.stackTraceToString().split("\n").map { it.trim() }.take(30).joinToString(separator = "\n")
                 false -> ""
             }
@@ -67,10 +86,26 @@ fun Application.configureRouting() {
                 text = "500: $cause \n$trace",
                 status = HttpStatusCode.InternalServerError
             ) // todo 20250602 some stack trace?
+
         }
-        status(HttpStatusCode.Unauthorized) { call, status ->
-            call.respondText(text = "401: Unauthorized", status = status)   // todo 20250602 add some template
+        status(HttpStatusCode.NotFound) { call, status ->
+            if(call.request.path().startsWith("/api")) {    // todo 20260607 or Accept header json
+                call.respond(
+                    status,
+                    ApiError(
+                        status = status.value,
+                        message = status.description,
+                    )
+                )
+            } else {
+                status(status) { call, status ->
+                    call.respondText(text = "${status.value}: ${status.description}", status = status)   // todo 20250602 add some template
+                }
+            }
         }
+//        status(HttpStatusCode.Unauthorized) { call, status -> // todo 20250607 ломает basic авторизацию
+//            call.respondText(text = "401: Unauthorized", status = status)   // todo 20250602 add some template
+//        }
     }
     routing {
         get("/") {

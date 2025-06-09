@@ -37,6 +37,7 @@ class AuthService(
         deviceId: UUID,
     ): UserSessionEntity = dbQuery {
         val user = UserEntity.findById(userId) ?: throw DBException("selectUser")
+        // close other sessions with same device/deviceId, это отзовет все токены, выданные ранее
         UserSessions.update ({ (UserSessions.device eq device) and (UserSessions.device_id eq deviceId) }) {
             it[closed] = 1
         }
@@ -45,7 +46,6 @@ class AuthService(
             this.device = device
             this.deviceId = deviceId
         }
-        // todo 20250602 close other sessions with same device/deviceId
     }
 
     suspend fun select(id: Int ): UserSessionEntity? = dbQuery { UserSessionEntity.findById(id) }

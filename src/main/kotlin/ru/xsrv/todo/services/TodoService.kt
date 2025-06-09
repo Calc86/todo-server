@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -41,10 +42,40 @@ class TodoService(
         }.let { Todo.entityMapper(it) }
     }
 
-    suspend fun done(id: Int, comment: String = "") = dbQuery {
+    suspend fun select(todo: Todo): Todo? = dbQuery {
+        TodoEntity.findById(todo.id)?.let { Todo.entityMapper(it) }
+    }
+
+    suspend fun selectEntity(userId: Int, todo: Todo): TodoEntity? = selectEntity(userId, todo.id)
+
+    suspend fun selectEntity(userId: Int, id: Int): TodoEntity? = dbQuery {
+        TodoEntity.findById(id)?.let {
+            when (it.user.value == userId) {
+                true -> it
+                false -> null
+            }
+        }
+    }
+
+    suspend fun select(userId: Int, todo: Todo): Todo? = dbQuery {
+        selectEntity(userId, todo)?.let { Todo.entityMapper(it) }
+    }
+
+    suspend fun update(userId: Int, todo: Todo): Todo = dbQuery {
+        (TodoEntity.findSingleByAndUpdate((Todos.user eq userId) and (Todos.id eq todo.id)) {
+            it.title = todo.title
+            it.description = todo.description
+            it.status = todo.status
+            // todo 20250607 add other fields
+            // todo 20250602 status DONE todo routine for some more logic
+        } ?: throw DBException("entity not found or not your entity"))
+            .let { Todo.entityMapper(it) }
+    }
+
+    suspend fun done(userId: Int, id: Int, comment: String = "") = dbQuery {
         (TodoEntity.findByIdAndUpdate(id) {
             it.status = Todos.Status.DONE
-        } ?: throw DBException("TodoEntity not found for id $id")).also {todo ->
+        } ?: throw DBException("TodoEntity not found for id $id")).also { todo ->
             TodoDoneEntity.new {
                 this.todo = todo.id
                 // todo 20250602 repeating id

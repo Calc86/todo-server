@@ -3,6 +3,7 @@ package ru.xsrv.todo.ru.xsrv.todo.di
 import io.ktor.server.application.*
 import org.koin.dsl.module
 import ru.xsrv.todo.ru.xsrv.todo.ktor.BasicAdminConfig
+import ru.xsrv.todo.ru.xsrv.todo.ktor.BasicDocConfig
 import ru.xsrv.todo.ru.xsrv.todo.ktor.Constants
 import ru.xsrv.todo.ru.xsrv.todo.ktor.JWTConfig
 
@@ -21,6 +22,12 @@ fun Application.koinSecret() = module {
         BasicAdminConfig(
             user = environment.config.property(Constants.Authentication.ADMIN_USER).getString(),
             password = environment.config.property(Constants.Authentication.ADMIN_PASSWORD).getString(),
+        )
+    }
+    single {
+        BasicDocConfig(
+            user = environment.config.property(Constants.Authentication.DOC_USER).getString(),
+            password = environment.config.property(Constants.Authentication.DOC_PASSWORD).getString(),
         )
     }
 }

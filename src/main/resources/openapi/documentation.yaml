@@ -1,14 +1,203 @@
-openapi: "3.0.3"
+openapi: "3.1.0"
 info:
-  title: "Application API"
-  description: "Application API"
+  title: "todo_server API"
+  description: "todo_server API"
   version: "1.0.0"
 servers:
-  - url: "http://0.0.0.0:8080"
+- url: "https://todo_server"
 paths:
+  /users:
+    post:
+      description: "Create user"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExposedUser"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                type: "integer"
+                format: "int32"
+  /users/{id}:
+    delete:
+      description: "Delete user"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    get:
+      description: "Read user"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ExposedUser"
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    put:
+      description: "Update user"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExposedUser"
+        required: true
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /json/gson:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Map_String"
+  /json/kotlinx-serialization:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Map_String"
+  /html-css-dsl:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Function1_? super HTML"
+              examples:
+                text/html:
+                  description: "HTML document"
+                  value: ""
+  /html-dsl:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Function1_? super HTML"
+              examples:
+                text/html:
+                  description: "HTML document"
+                  value: ""
+  /pebble-index:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PebbleContent"
+              examples:
+                Example#1:
+                  description: ""
+                  value:
+                    template: "pebble-index.html"
+                    model: "null"
+                    locale: "null"
+                    etag: "null"
+                    contentType: "null"
+  /styles.css:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/css:
+              schema:
+                type: "string"
+  /metrics-micrometer:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
   /:
     get:
-      description: "Hello World!"
+      description: ""
       responses:
         "200":
           description: "OK"
@@ -19,5 +208,708 @@ paths:
               examples:
                 Example#1:
                   value: "Hello World!"
+  /callback:
+    get:
+      description: ""
+      responses:
+        "302":
+          description: "Found <br> Redirect"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "/hello"
+  /login:
+    get:
+      description: ""
+      responses:
+        "302":
+          description: "Found <br> Redirect"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "/callback"
+  /protected/route/basic:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+  /protected/route/form:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+  /api:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Api blank page"
+  /api/auth/check:
+    get:
+      description: "проверить токен авторизации"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/auth/logout:
+    get:
+      description: ""
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/auth/refresh:
+    get:
+      description: "обновить токен авторизации"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Token"
+  /api/auth/refresh-token:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Token"
+  /api/check/user:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "check user page"
+  /api/settings:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Map_String"
+  /api/shop-list/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShopList"
+        required: true
+  /api/shop-list/delete:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShopList"
+        required: true
+  /api/shop-list/done:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShopList"
+        required: true
+  /api/shop-list/update:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShopList"
+        required: true
+  /api/throw-validation:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                Example#1:
+                  description: ""
+                  value:
+                    status: "null"
+                    message: "ApiError"
+                    code: 0
+                    trace: []
+  /api/todo/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Todo"
+        required: true
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Todo"
+  /api/todo/delete:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Todo"
+        required: true
+      responses:
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                Example#1:
+                  description: ""
+                  value:
+                    status: "null"
+                    message: "ApiError"
+                    code: 0
+                    trace: []
+        "500":
+          description: "Internal Server Error"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                Example#1:
+                  description: ""
+                  value:
+                    status: "null"
+                    message: "ApiError"
+                    code: 0
+                    trace: []
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/todo/done:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Todo"
+        required: true
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Todo"
+  /api/todo/update:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Todo"
+        required: true
+      responses:
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Todo"
+  /api/user:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Register"
+        required: true
+      responses:
+        "409":
+          description: "Conflict"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                Example#1:
+                  description: ""
+                  value:
+                    status: "null"
+                    message: "ApiError"
+                    code: 0
+                    trace: []
+        "500":
+          description: "Internal Server Error"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                Example#1:
+                  description: ""
+                  value:
+                    status: "null"
+                    message: "ApiError"
+                    code: 0
+                    trace: []
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/User"
+  /throw-validation:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiError"
+              examples:
+                Example#1:
+                  description: ""
+                  value:
+                    status: "null"
+                    message: "ApiError"
+                    code: 0
+                    trace: []
+  /admin:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK <br> call.respondText(\"Hello, ${call.principal<UserIdPrincipal>()?.name}!\"\
+            )"
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Function1_? super HTML"
+              examples:
+                text/html:
+                  description: "HTML document"
+                  value: ""
+  /admin/sessions:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Function1_? super HTML"
+              examples:
+                text/html:
+                  description: "HTML document"
+                  value: ""
+  /admin/shop-lists:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Function1_? super HTML"
+              examples:
+                text/html:
+                  description: "HTML document"
+                  value: ""
+  /admin/tags:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Function1_? super HTML"
+              examples:
+                text/html:
+                  description: "HTML document"
+                  value: ""
+  /admin/todos:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Function1_? super HTML"
+              examples:
+                text/html:
+                  description: "HTML document"
+                  value: ""
+  /admin/users:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Function1_? super HTML"
+              examples:
+                text/html:
+                  description: "HTML document"
+                  value: ""
 components:
-  schemas: { }
+  schemas:
+    ApiError:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          format: "int32"
+        message:
+          type: "string"
+        code:
+          type: "integer"
+          format: "int32"
+        trace:
+          type: "array"
+          items:
+            type: "string"
+      required:
+      - "message"
+      - "trace"
+    ExposedUser:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        age:
+          type: "integer"
+          format: "int32"
+      required:
+      - "name"
+    Map:
+      type: "object"
+      properties: {}
+    Map_String:
+      type: "string"
+    Function1:
+      type: "object"
+      properties: {}
+    Function1_? super HTML:
+      type: "object"
+    Locale:
+      type: "object"
+      properties: {}
+    HeaderValueParam:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        value:
+          type: "string"
+        escapeValue:
+          type: "boolean"
+      required:
+      - "name"
+      - "value"
+    ContentType:
+      type: "object"
+      properties:
+        contentType:
+          type: "string"
+        contentSubtype:
+          type: "string"
+        parameters:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/HeaderValueParam"
+      required:
+      - "contentType"
+      - "contentSubtype"
+      - "parameters"
+    PebbleContent:
+      type: "object"
+      properties:
+        template:
+          type: "string"
+        model:
+          type: "string"
+        locale:
+          $ref: "#/components/schemas/Locale"
+        etag:
+          type: "string"
+        contentType:
+          $ref: "#/components/schemas/ContentType"
+      required:
+      - "template"
+      - "model"
+      - "contentType"
+    Token:
+      type: "object"
+      properties:
+        token:
+          type: "string"
+        ttl:
+          type: "integer"
+          format: "int32"
+        created:
+          type: "integer"
+          format: "int32"
+      required:
+      - "token"
+    ShopList:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        title:
+          type: "string"
+        description:
+          type: "string"
+        unit:
+          type: "string"
+          enum:
+          - "ITEM"
+          - "KG"
+          - "GR"
+        unitValue:
+          type: "number"
+          format: "float"
+        date:
+          type: "string"
+        status:
+          type: "string"
+          enum:
+          - "DONE"
+          - "NEW"
+          - "REPEATED"
+          - "DELAY"
+        comment:
+          type: "string"
+      required:
+      - "title"
+      - "description"
+      - "unit"
+      - "date"
+      - "status"
+      - "comment"
+    Todo:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+        id:
+          type: "integer"
+          format: "int32"
+        description:
+          type: "string"
+        status:
+          type: "string"
+          enum:
+          - "DONE"
+          - "NEW"
+          - "REPEATED"
+          - "DELAY"
+      required:
+      - "title"
+      - "description"
+      - "status"
+    UserProfile:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+      required:
+      - "name"
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        uuid:
+          type: "string"
+        email:
+          type: "string"
+        date:
+          type: "string"
+        status:
+          type: "string"
+          enum:
+          - "NOT_CONFIRMED"
+          - "ENABLED"
+          - "DELETED"
+          - "BLOCKED"
+        profile:
+          $ref: "#/components/schemas/UserProfile"
+      required:
+      - "uuid"
+      - "email"
+      - "date"
+      - "status"
+      - "profile"
+    Auth:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+        device:
+          type: "string"
+        device_id:
+          type: "string"
+    HttpAuthHeader:
+      type: "object"
+      properties:
+        authScheme:
+          type: "string"
+      required:
+      - "authScheme"
+    UnauthorizedResponse:
+      type: "object"
+      properties:
+        challenges:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/HttpAuthHeader"
+    Register:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        device:
+          type: "string"
+        device_id:
+          type: "string"

@@ -7,18 +7,22 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
+import ru.xsrv.todo.ru.xsrv.todo.db.tables.todo.Todos
 import ru.xsrv.todo.ru.xsrv.todo.ktor.action.userLogin
 import ru.xsrv.todo.ru.xsrv.todo.ktor.action.userProfile
 import ru.xsrv.todo.ru.xsrv.todo.ktor.action.userRegister
+import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.HttpException
 import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.ValidationException
 import ru.xsrv.todo.ru.xsrv.todo.models.ShopList
 import ru.xsrv.todo.ru.xsrv.todo.models.Todo
 import ru.xsrv.todo.ru.xsrv.todo.services.AuthService
+import ru.xsrv.todo.ru.xsrv.todo.services.TodoService
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 
 fun Application.configureApi() {
     val userService by inject<UserService>()
     val authService by inject<AuthService>()
+    val todoService: TodoService by inject<TodoService>()
 
     routing {
         get("/throw-validation") {
@@ -81,25 +85,33 @@ fun Application.configureApi() {
                         val principal = call.principal<UserPrincipal>()!!
                         val todo = call.receive<Todo>()
                         todo.validate(this, Todo.validator) {
-                            // todo 20250602 create todo
+                            val result = todoService.create(principal.user.id, todo)
+                            call.respond(result)
                         }
                     }
                     post("/update") {
                         val principal = call.principal<UserPrincipal>()!!
                         val todo = call.receive<Todo>()
                         todo.validate(this, Todo.validator) {
-                            // todo 20250602 update todo
+                            val result = todoService.update(principal.user.id, todo)
+                            call.respond(result)
                         }
                     }
                     post("/done") {
                         val principal = call.principal<UserPrincipal>()!!
                         val todo = call.receive<Todo>() // todo 20250602 may be int id
-                        // todo 20250602 done todo
+                        todo.copy(status = Todos.Status.DONE).validate(this, Todo.validator) {
+                            val result = todoService.update(principal.user.id, todo)
+                            call.respond(result)
+                        }
                     }
                     post("/delete") {
                         val principal = call.principal<UserPrincipal>()!!
                         val todo = call.receive<Todo>() // todo 20250602 may be int id
-                        // todo 20250602 delete todo
+                        todoService.selectEntity(principal.user.id, todo)
+                            ?.delete()
+                            ?: throw HttpException(HttpStatusCode.NotFound, "Todo with id ${todo.id} not found for currebt user")
+                        call.respond(HttpStatusCode.OK)
                     }
                 }
             }
@@ -108,25 +120,25 @@ fun Application.configureApi() {
                     val principal = call.principal<UserPrincipal>()!!
                     val todo = call.receive<ShopList>()
                     todo.validate(this, ShopList.validator) {
-                        // todo 20250602 create todo
+                        // todo 20250602 create shop
                     }
                 }
                 post("/update") {
                     val principal = call.principal<UserPrincipal>()!!
                     val todo = call.receive<ShopList>()
                     todo.validate(this, ShopList.validator) {
-                        // todo 20250602 update todo
+                        // todo 20250602 update shop
                     }
                 }
                 post("/done") {
                     val principal = call.principal<UserPrincipal>()!!
                     val todo = call.receive<ShopList>() // todo 20250602 may be int id
-                    // todo 20250602 done todo
+                    // todo 20250602 done shop
                 }
                 post("/delete") {
                     val principal = call.principal<UserPrincipal>()!!
                     val todo = call.receive<ShopList>() // todo 20250602 may be int id
-                    // todo 20250602 delete todo
+                    // todo 20250602 delete shop
                 }
             }
         }

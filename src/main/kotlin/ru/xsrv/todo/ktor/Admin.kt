@@ -5,8 +5,10 @@ import io.ktor.server.auth.*
 import io.ktor.server.html.*
 import io.ktor.server.routing.*
 import kotlinx.html.*
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.xsrv.todo.ru.xsrv.todo.db.entities.*
+import ru.xsrv.todo.ru.xsrv.todo.db.tables.todo.Todos
 
 fun Application.configureWebAdmin() {
     routing {
@@ -178,7 +180,7 @@ fun Application.configureWebAdmin() {
                 route("/todos") {
                     get {
                         val todos = transaction {
-                            TodoEntity.all().offset(0).limit(100).toList()
+                            TodoEntity.all().orderBy(Todos.id to SortOrder.DESC).offset(0).limit(100).toList()
                         }
 
                         call.respondHtml {

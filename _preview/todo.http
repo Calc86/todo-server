@@ -1,0 +1,62 @@
+### Авторизация
+
+POST {{server}}/api/user/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "device": "other",
+  "device_id": "{{uuid}}"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Создать todo
+
+POST {{server}}/api/todo/create
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "my first todo"
+}
+
+### Создать todo 1
+
+POST {{server}}/api/todo/create
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "my first todo",
+  "description": "some description",
+  "status": "NEW"
+}
+
+### Создать todo с неправильным статусом
+
+POST {{server}}/api/todo/create
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "my first todo",
+  "description": "some description",
+  "status": "NEW1"
+}
+
+### Обновить Todo
+
+POST {{server}}/api/todo/update
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "id": 11,
+  "title": "my first todo, updated1",
+  "description": "some description for update1",
+  "status": "DONE"
+}
