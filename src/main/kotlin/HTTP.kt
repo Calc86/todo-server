@@ -50,7 +50,7 @@ fun Application.configureHTTP() {
             invalidateAt = 10.seconds
         }
     }
-    routing {// todo 20250602 secure
+    routing {
         authenticate(Constants.Authentication.DOC_AUTH) {
             swaggerUI(path = "openapi")
         }

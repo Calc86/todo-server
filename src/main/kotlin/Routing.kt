@@ -95,11 +95,11 @@ fun Application.configureRouting() {
                 call.respondText(
                     text = "500: $cause \n${trace.joinToString(separator = "\n")}",
                     status = HttpStatusCode.InternalServerError
-                ) // todo 20250602 some stack trace?
+                )
             }
         }
         status(HttpStatusCode.NotFound) { call, status ->
-            if(call.request.path().startsWith("/api")) {    // todo 20260607 or Accept header json
+            if(call.request.path().startsWith("/api")) {
                 call.respond(
                     status,
                     ApiError(
@@ -108,14 +108,9 @@ fun Application.configureRouting() {
                     )
                 )
             } else {
-                status(status) { call, status ->
-                    call.respondText(text = "${status.value}: ${status.description}", status = status)   // todo 20250602 add some template
-                }
+                call.respondText(text = "${status.value}: ${status.description}", status = status)   // todo 20250602 add some template
             }
         }
-//        status(HttpStatusCode.Unauthorized) { call, status -> // todo 20250607 ломает basic авторизацию
-//            call.respondText(text = "401: Unauthorized", status = status)   // todo 20250602 add some template
-//        }
     }
     routing {
         get("/") {

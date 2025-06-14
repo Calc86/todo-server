@@ -80,3 +80,10 @@ Authorization: Bearer {{refresh_token}}
 GET {{server}}/api/auth/check
 accept: application/json
 Authorization: Bearer {{refresh_token}}
+
+
+### logout
+
+GET {{server}}/api/auth/logout
+accept: application/json
+Authorization: Bearer {{auth_token}}

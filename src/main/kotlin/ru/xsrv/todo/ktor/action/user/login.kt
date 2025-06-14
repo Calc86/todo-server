@@ -1,4 +1,4 @@
-package ru.xsrv.todo.ru.xsrv.todo.ktor.action
+package ru.xsrv.todo.ru.xsrv.todo.ktor.action.user
 
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
