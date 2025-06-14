@@ -8,28 +8,29 @@ import ru.xsrv.todo.ru.xsrv.todo.models.requests.Validator
 
 @Serializable
 data class ShopList(
-    val id: Int,
-    val title: String,
-    val description: String,
-    val unit: ShopLists.Units,
-    val unitValue: Float,
-    val date: String,
-    val status: ShopLists.Status,
-    val comment: String,
+    val id: Int = 0,
+    val title: String = "",
+    val description: String = "",
+    val unit: ShopLists.Units = ShopLists.Units.ITEM,
+    val unitValue: Float = 1f,
+    val date: String? = null,
+    val status: ShopLists.Status = ShopLists.Status.NEW,
+    val comment: String = "",
 ) {
     companion object {
         val entityMapper: Mapper<ShopListEntity, ShopList> = { list ->
             ShopList(
-                list.id.value,
-                list.title,
-                list.description,
-                list.unit,
-                list.unitValue,
-                list.date.toString(),
-                list.status,
-                list.comment
+                id = list.id.value,
+                title = list.title,
+                description = list.description,
+                unit = list.unit,
+                unitValue = list.unitValue,
+                date = list.date.toString(),
+                status = list.status,
+                comment = list.comment
             )
         }
+
         val validator: Validator<ShopList> = { shopList ->
             // todo 20250602 validate
         }

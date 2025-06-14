@@ -1,0 +1,68 @@
+### Авторизация
+
+POST {{server}}/api/user/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "device": "other",
+  "device_id": "{{uuid}}"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### Создать list
+
+POST {{server}}/api/shop-list/create
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "my first list"
+}
+### Создать list 1
+
+POST {{server}}/api/shop-list/create
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "my first list",
+  "description": "some description",
+  "unit": "ITEM",
+  "unitValue": 1,
+  "status": "NEW",
+  "comment": "comment1"
+}
+
+### Создать list с неправильным статусом
+
+POST {{server}}/api/shop-list/create
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "my first todo",
+  "description": "some description",
+  "status": "NEW1",
+  "unit": "ITEM",
+  "comment": "comment1"
+}
+
+### Обновить list
+
+POST {{server}}/api/shop-list/update
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "id": 1,
+  "title": "my first todo",
+  "description": "some description updated",
+  "status": "NEW",
+  "unit": "ITEM",
+  "comment": "comment1 updated"
+}

@@ -257,7 +257,7 @@ fun Application.configureWebAdmin() {
                                         tr {
                                             td { +it.id.toString() }
                                             td { +it.user.value.toString() }
-                                            td { +it.list.value.toString() }
+                                            td { +(it.list?.value?.toString() ?: "null") }
                                             td { +it.title }
                                             td { +it.description }
                                             td { +it.unit.toString() }

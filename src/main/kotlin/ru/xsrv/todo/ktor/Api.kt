@@ -7,6 +7,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
+import ru.xsrv.todo.ru.xsrv.todo.db.tables.shop.ShopLists
 import ru.xsrv.todo.ru.xsrv.todo.db.tables.todo.Todos
 import ru.xsrv.todo.ru.xsrv.todo.ktor.action.userLogin
 import ru.xsrv.todo.ru.xsrv.todo.ktor.action.userProfile
@@ -16,6 +17,7 @@ import ru.xsrv.todo.ru.xsrv.todo.ktor.exceptions.ValidationException
 import ru.xsrv.todo.ru.xsrv.todo.models.ShopList
 import ru.xsrv.todo.ru.xsrv.todo.models.Todo
 import ru.xsrv.todo.ru.xsrv.todo.services.AuthService
+import ru.xsrv.todo.ru.xsrv.todo.services.ShopListService
 import ru.xsrv.todo.ru.xsrv.todo.services.TodoService
 import ru.xsrv.todo.ru.xsrv.todo.services.UserService
 
@@ -23,6 +25,7 @@ fun Application.configureApi() {
     val userService by inject<UserService>()
     val authService by inject<AuthService>()
     val todoService: TodoService by inject<TodoService>()
+    val listService: ShopListService by inject<ShopListService>()
 
     routing {
         get("/throw-validation") {
@@ -110,36 +113,47 @@ fun Application.configureApi() {
                         val todo = call.receive<Todo>() // todo 20250602 may be int id
                         todoService.selectEntity(principal.user.id, todo)
                             ?.delete()
-                            ?: throw HttpException(HttpStatusCode.NotFound, "Todo with id ${todo.id} not found for currebt user")
+                            ?: throw HttpException(HttpStatusCode.NotFound, "Todo with id ${todo.id} not found for current user")
                         call.respond(HttpStatusCode.OK)
                     }
                 }
             }
             route("shop-list") {
-                post("/create") {
-                    val principal = call.principal<UserPrincipal>()!!
-                    val todo = call.receive<ShopList>()
-                    todo.validate(this, ShopList.validator) {
-                        // todo 20250602 create shop
+                authenticate {
+                    post("/create") {
+                        val principal = call.principal<UserPrincipal>()!!
+                        val list = call.receive<ShopList>()
+                        list.validate(this, ShopList.validator) {
+                            val result = listService.create(principal.user.id, list)
+                            call.respond(result)
+                        }
+                    }
+                    post("/update") {
+                        val principal = call.principal<UserPrincipal>()!!
+                        val list = call.receive<ShopList>()
+                        list.validate(this, ShopList.validator) {
+                            val result = listService.update(principal.user.id, list)
+                            call.respond(result)
+                        }
+                    }
+                    post("/done") {
+                        val principal = call.principal<UserPrincipal>()!!
+                        val list = call.receive<ShopList>() // todo 20250602 may be int id
+                        list.copy(status = ShopLists.Status.DONE).validate(this, ShopList.validator) {
+                            val result = listService.update(principal.user.id, list)
+                            call.respond(result)
+                        }
+                    }
+                    post("/delete") {
+                        val principal = call.principal<UserPrincipal>()!!
+                        val list = call.receive<ShopList>() // todo 20250602 may be int id
+                        listService.selectEntity(principal.user.id, list)
+                            ?.delete()
+                            ?: throw HttpException(HttpStatusCode.NotFound, "ShopList with id ${list.id} not found for current user")
+                        call.respond(HttpStatusCode.OK)
                     }
                 }
-                post("/update") {
-                    val principal = call.principal<UserPrincipal>()!!
-                    val todo = call.receive<ShopList>()
-                    todo.validate(this, ShopList.validator) {
-                        // todo 20250602 update shop
-                    }
-                }
-                post("/done") {
-                    val principal = call.principal<UserPrincipal>()!!
-                    val todo = call.receive<ShopList>() // todo 20250602 may be int id
-                    // todo 20250602 done shop
-                }
-                post("/delete") {
-                    val principal = call.principal<UserPrincipal>()!!
-                    val todo = call.receive<ShopList>() // todo 20250602 may be int id
-                    // todo 20250602 delete shop
-                }
+
             }
         }
     }

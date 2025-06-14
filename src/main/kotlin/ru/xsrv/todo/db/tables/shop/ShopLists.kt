@@ -17,7 +17,7 @@ object ShopLists : IntIdTable(Names.TABLE) {
     /**
      * Повторная покупка для сохранения истории или функции "повторить"
      */
-    val list = reference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
+    val list = optReference(Names.LIST_ID, ShopLists.id, onDelete = ReferenceOption.CASCADE)
     val title = varchar(Names.TITLE, length = VAR_CHAR_MAX_LENGTH)
     val description = text(Names.DESCRIPTION)
     val unit = enumeration(Names.UNIT, Units::class)

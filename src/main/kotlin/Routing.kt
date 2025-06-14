@@ -79,14 +79,24 @@ fun Application.configureRouting() {
 
         exception<Throwable> { call, cause ->
             val trace = when (isDevMode) {
-                true -> cause.stackTraceToString().split("\n").map { it.trim() }.take(30).joinToString(separator = "\n")
-                false -> ""
+                true -> cause.stackTraceToString().split("\n").map { it.trim() }.take(30)
+                false -> listOf()
             }
-            call.respondText(
-                text = "500: $cause \n$trace",
-                status = HttpStatusCode.InternalServerError
-            ) // todo 20250602 some stack trace?
-
+            if(call.request.path().startsWith("/api")) {
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    ApiError(
+                        status = HttpStatusCode.InternalServerError.value,
+                        message = HttpStatusCode.InternalServerError.description,
+                        trace = trace
+                    )
+                )
+            } else {
+                call.respondText(
+                    text = "500: $cause \n${trace.joinToString(separator = "\n")}",
+                    status = HttpStatusCode.InternalServerError
+                ) // todo 20250602 some stack trace?
+            }
         }
         status(HttpStatusCode.NotFound) { call, status ->
             if(call.request.path().startsWith("/api")) {    // todo 20260607 or Accept header json
