@@ -90,3 +90,7 @@ mm.png заложено в БД, но не реализовано пока
 - Прописаны основные Entities для работы с БД
 - немного админ панели, чтобы не лезть в базу
 - всякие todo
+- shop-list
+
+openapi generated
+- resources/openapi/documentation.yaml

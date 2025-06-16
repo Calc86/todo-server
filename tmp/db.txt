@@ -46,7 +46,7 @@ auth_data
 ---
 id
 users_id
-list_id - для повторения
+list_id - для повторения, nullable
 title
 description
 unit шт/кг/гр

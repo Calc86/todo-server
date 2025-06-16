@@ -33,8 +33,8 @@ fun Application.configureTemplating() {
             call.respondCss {
                 body {
                     backgroundColor = Color.lightGray
-                    margin(0.px)
-                    padding(16.px)
+                    margin = Margin(0.px)
+                    padding = Padding(16.px)
                 }
                 table {
                     width = 100.pct
@@ -70,8 +70,8 @@ fun Application.configureTemplating() {
     }
 }
 
-suspend inline fun ApplicationCall.respondCss(builder: CSSBuilder.() -> Unit) {
-    this.respondText(CSSBuilder().apply(builder).toString(), ContentType.Text.CSS)
+suspend inline fun ApplicationCall.respondCss(builder: CssBuilder.() -> Unit) {
+    this.respondText(CssBuilder().apply(builder).toString(), ContentType.Text.CSS)
 }
 
 data class PebbleUser(val id: Int, val name: String)

@@ -3,7 +3,7 @@ ktor:
     modules:
       - ru.xsrv.todo.ApplicationKt.module
   deployment:
-    port: 8080
+    port: "$KTOR_PORT:8080"
     watch:  # development
       - classes
       - resources
@@ -23,16 +23,16 @@ jwt:  # JWT для /api
   domain: "https://jwt-provider-domain/"
   audience: "jwt-audience"
   realm: "ktor todo app"
-  secret: "shared_jwt_secret_change_after_deploy!!"
+  secret: "$JWT_SECRET:shared_jwt_secret_change_after_deploy!!"
 #  ttl: 60 # минута
   ttl: 86400 # сутки
   refresh-ttl: 2592000 # 30 дней
 
 auth:
   basic-admin-auth: # доступ к /admin панели
-    user: admin
-    password: admin
+    user: "$AUTH_ADMIN_USER:admin"
+    password: "$AUTH_ADMIN_PASSWORD:admin"
   basic-doc-auth: # доступ к /openapi панели
-    user: doc
-    password: doc
+    user: "$AUTH_DOC_USER:doc"
+    password: "$AUTH_DOC_PASSWORD:doc"
 
